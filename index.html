@@ -10,14 +10,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Pretendard:wght@400;600;700;800&display=swap');
-        body { font-family: 'Pretendard', sans-serif; background: #F8FAFC; overflow: hidden; margin: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Pretendard:wght@400;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background: #F1F5F9; overflow: hidden; margin: 0; }
         .font-eng { font-family: 'Montserrat', sans-serif; }
-        .bg-premium { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .bg-gradient-premium { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .mic-active { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { transform: scale(1); } }
-        .page-transition { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page-transition { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         * { -webkit-tap-highlight-color: transparent; outline: none; }
     </style>
 </head>
@@ -47,4 +48,198 @@
             { id: 17, part: "PART 3", category: "의견, 판단 및 감각", pattern: "It feels like ~", desc: "~처럼 느껴져", quizzes: [{ kr: "여름처럼 느껴져.", en: "It feels like summer." }, { kr: "꿈처럼 느껴져.", en: "It feels like a dream." }, { kr: "여기 전에 와본 것 같은 기분이야.", en: "It feels like I've been here before." }] },
             { id: 18, part: "PART 3", category: "의견, 판단 및 감각", pattern: "It looks like ~", desc: "~처럼 보여", quizzes: [{ kr: "비 올 것 같아.", en: "It looks like rain." }, { kr: "좋은 기회인 것 같아.", en: "It looks like a great opportunity." }, { kr: "그들은 바빠 보여.", en: "It looks like they're busy." }] },
             { id: 19, part: "PART 3", category: "의견, 판단 및 감각", pattern: "It sounds like ~", desc: "~처럼 들려", quizzes: [{ kr: "그거 좋은 생각 같네.", en: "It sounds like a plan." }, { kr: "아주 재미있을 것 같아.", en: "It sounds like a lot of fun." }, { kr: "힘든 시간을 보내고 있는 것 같네.", en: "It sounds like you're having a hard time." }] },
-            { id: 20, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "There is / There are ~", desc: "~가 있어", quizzes: [{ kr: "문제가 하나 있어.", en: "There is a proble
+            { id: 20, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "There is / There are ~", desc: "~가 있어", quizzes: [{ kr: "문제가 하나 있어.", en: "There is a problem." }, { kr: "그건 의심의 여지가 없어.", en: "There is no doubt about it." }, { kr: "할 일이 많아.", en: "There are many things to do." }] },
+            { id: 21, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "The thing is ~", desc: "문제는/사실은 ~야", quizzes: [{ kr: "실은 내가 오늘 좀 바빠.", en: "The thing is I'm busy today." }, { kr: "사실은 내가 돈이 충분하지 않아.", en: "The thing is I don't have enough money." }, { kr: "문제는 너무 늦었다는 거야.", en: "The thing is it's too late." }] },
+            { id: 22, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "As far as I know ~", desc: "내가 아는 바로는 ~", quizzes: [{ kr: "내가 알기로 그는 떠났어.", en: "As far as I know, he left." }, { kr: "내가 알기로는 그거 무료야.", en: "As far as I know, it's free." }, { kr: "내가 보기에는 괜찮아.", en: "As far as I'm concerned, it's fine." }] },
+            { id: 23, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "You don't have to ~", desc: "~할 필요 없어", quizzes: [{ kr: "걱정할 필요 없어.", en: "You don't have to worry." }, { kr: "서두를 필요 없어.", en: "You don't have to hurry." }, { kr: "사과할 필요 없어.", en: "You don't have to apologize." }] },
+            { id: 24, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "You might want to ~", desc: "~하는 게 좋을지도 몰라", quizzes: [{ kr: "다시 확인해 보는 게 좋을 것 같아.", en: "You might want to check again." }, { kr: "이걸 한번 해보는 게 좋을 거야.", en: "You might want to try this one." }, { kr: "그에게 먼저 전화해 보는 게 좋을지도 몰라.", en: "You might want to call him first." }] },
+            { id: 25, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "It depends on ~", desc: "~에 따라 달라", quizzes: [{ kr: "그건 상황에 따라 달라.", en: "It depends on the situation." }, { kr: "그건 날씨에 따라 달라.", en: "It depends on the weather." }, { kr: "그건 네가 얼마나 간절한지에 달려 있어.", en: "It depends on how much you want it." }] },
+            { id: 26, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "I'll let you know ~", desc: "알려줄게", quizzes: [{ kr: "나중에 알려줄게.", en: "I'll let you know later." }, { kr: "결과를 알려줄게.", en: "I'll let you know the result." }, { kr: "도착하자마자 알려줄게.", en: "I'll let you know as soon as I arrive." }] },
+            { id: 27, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "I didn't mean to ~", desc: "~하려던 건 아니었어", quizzes: [{ kr: "널 다치게 하려던 건 아니었어.", en: "I didn't mean to hurt you." }, { kr: "방해하려던 건 아니었어.", en: "I didn't mean to interrupt." }, { kr: "널 계속 기다리게 하려던 건 아니었어.", en: "I didn't mean to keep you waiting." }] },
+            { id: 28, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "I can't wait to ~", desc: "~하는 게 너무 기대돼", quizzes: [{ kr: "널 만나는 게 너무 기대돼.", en: "I can't wait to see you." }, { kr: "새 직장을 시작하는 게 너무 기대돼.", en: "I can't wait to start my new job." }, { kr: "휴가 가는 게 너무 기대돼.", en: "I can't wait to go on vacation." }] },
+            { id: 29, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "That's why ~", desc: "그래서 ~한 거야", quizzes: [{ kr: "그래서 내가 일찍 나간 거야.", en: "That's why I left early." }, { kr: "그래서 내가 여기 있는 거야.", en: "That's why I'm here." }, { kr: "그래서 내가 이곳을 사랑하는 거야.", en: "That's why I love this place." }] },
+            { id: 30, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "That's what I mean", desc: "내 말이 바로 그 말이야", quizzes: [{ kr: "그러니까 그게 내가 하고 싶은 말이야.", en: "That's what I mean." }, { kr: "정확해, 내 말이 그 말이야!", en: "Exactly, that's what I mean!" }, { kr: "내 말이 무슨 뜻인지 알지.", en: "You know what I mean." }] }
+        ];
+
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function App() {
+            const [view, setView] = useState('HOME');
+            const [currentQuizzes, setCurrentQuizzes] = useState([]);
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [userInput, setUserInput] = useState("");
+            const [showAnswer, setShowAnswer] = useState(false);
+            const [isListening, setIsListening] = useState(false);
+
+            const speak = (text, lang = 'en-US') => {
+                window.speechSynthesis.cancel();
+                const uttr = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Samantha') || v.name.includes('Zira') || v.name.includes('Google US English') || v.name.includes('Female')));
+                if (femaleVoice) uttr.voice = femaleVoice;
+                uttr.lang = lang;
+                uttr.rate = 0.95;
+                window.speechSynthesis.speak(uttr);
+            };
+
+            const handleStart = (type, part = null) => {
+                if (type === 'ALL') {
+                    speak("Starting Full Course");
+                    const all = patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
+                    setCurrentQuizzes(all);
+                    setCurrentIndex(0);
+                    setView('STUDY');
+                } else if (type === 'RANDOM') {
+                    speak("Starting Random Test");
+                    const all = patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
+                    setCurrentQuizzes(shuffleArray(all));
+                    setCurrentIndex(0);
+                    setView('TEST');
+                } else if (type === 'PART_SELECT') {
+                    speak("Select a part");
+                    setView('PART_SELECT');
+                } else if (type === 'PART_GO') {
+                    speak("Starting " + part);
+                    const filtered = patterns
+                        .filter(p => p.part === part)
+                        .flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
+                    setCurrentQuizzes(filtered);
+                    setCurrentIndex(0);
+                    setView('STUDY');
+                }
+            };
+
+            if (view === 'HOME') {
+                return (
+                    <div className="h-screen flex flex-col p-6 page-transition">
+                        <header className="flex-none pt-12 pb-16 text-center">
+                            <h1 className="text-3xl font-black text-slate-900 leading-tight mb-2 tracking-tighter">필수 영어 패턴 <span className="text-blue-600">30</span></h1>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] font-eng">Essential English Patterns</p>
+                        </header>
+
+                        <div className="flex-1 flex flex-col gap-4">
+                            <button onClick={() => handleStart('ALL')} className="group flex-none bg-gradient-premium p-8 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 text-left relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1 font-eng italic">In Order</p>
+                                    <h2 className="text-2xl font-bold text-white tracking-tight">전체 학습하기 <span className="text-blue-400 font-eng text-xl ml-1">Full Course</span></h2>
+                                </div>
+                                <i className="fas fa-play absolute right-8 top-1/2 -translate-y-1/2 text-white/10 text-4xl group-hover:text-blue-500/30 transition-colors"></i>
+                            </button>
+
+                            <button onClick={() => handleStart('PART_SELECT')} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative">
+                                <p className="text-blue-500 text-[10px] font-black uppercase tracking-widest mb-1 font-eng italic">Sectional</p>
+                                <h2 className="text-2xl font-bold text-slate-800 tracking-tight">파트별 집중 학습 <span className="text-slate-300 font-eng text-xl ml-1">Part Study</span></h2>
+                                <i className="fas fa-layer-group absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-blue-100 transition-colors text-4xl"></i>
+                            </button>
+
+                            <button onClick={() => handleStart('RANDOM')} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative">
+                                <p className="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1 font-eng italic">Random</p>
+                                <h2 className="text-2xl font-bold text-slate-800 tracking-tight">무작위 랜덤 테스트 <span className="text-slate-300 font-eng text-xl ml-1">Random Test</span></h2>
+                                <i className="fas fa-shuffle absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-orange-100 transition-colors text-4xl"></i>
+                            </button>
+                        </div>
+                        <footer className="flex-none py-6 text-center text-[10px] text-slate-300 font-bold tracking-widest uppercase">Mastery through Repetition</footer>
+                    </div>
+                );
+            }
+
+            if (view === 'PART_SELECT') {
+                const parts = [
+                    { id: 'PART 1', title: '현재의 행동 및 의도', sub: 'Actions & Intentions' },
+                    { id: 'PART 2', title: '요청 및 정중한 표현', sub: 'Requests & Politeness' },
+                    { id: 'PART 3', title: '의견, 판단 및 감각', sub: 'Opinions & Judgments' },
+                    { id: 'PART 4', title: '상황 설명 및 논리 연결', sub: 'Situations & Logic' }
+                ];
+                return (
+                    <div className="h-screen flex flex-col p-6 page-transition">
+                        <header className="flex-none py-8 flex items-center gap-4">
+                            <button onClick={() => setView('HOME')} className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-slate-400 active:scale-90 transition-transform"><i className="fas fa-chevron-left"></i></button>
+                            <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Select Part</h2>
+                        </header>
+                        <div className="flex-1 flex flex-col gap-3 overflow-y-auto">
+                            {parts.map(p => (
+                                <button key={p.id} onClick={() => handleStart('PART_GO', p.id)} className="flex-none bg-white p-6 rounded-3xl border border-slate-100 shadow-sm text-left flex justify-between items-center active:bg-blue-50 transition-all">
+                                    <div>
+                                        <p className="text-[10px] font-black text-blue-500 mb-1 tracking-widest">{p.id}</p>
+                                        <p className="font-bold text-slate-800 leading-tight">{p.title}</p>
+                                        <p className="text-[10px] text-slate-400 font-eng font-bold">{p.sub}</p>
+                                    </div>
+                                    <i className="fas fa-chevron-right text-slate-100"></i>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                );
+            }
+
+            const current = currentQuizzes[currentIndex];
+
+            return (
+                <div className="h-screen flex flex-col p-6 page-transition bg-white">
+                    <header className="flex-none flex items-center justify-between py-4 border-b border-slate-50 mb-4">
+                        <button onClick={() => setView('HOME')} className="text-slate-300 hover:text-slate-800 transition"><i className="fas fa-times text-xl"></i></button>
+                        <div className="text-center">
+                            <p className="text-[10px] font-black text-blue-500 tracking-widest mb-0.5 uppercase tracking-[0.2em]">{view}</p>
+                            <p className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">{currentIndex + 1} / {currentQuizzes.length}</p>
+                        </div>
+                        <div className="w-6"></div>
+                    </header>
+
+                    <main className="flex-1 flex flex-col justify-between overflow-hidden">
+                        <div className="flex-none mb-6">
+                            <span className="text-[10px] font-black text-blue-500 block mb-1 uppercase tracking-widest">{current.part}</span>
+                            <h3 className="text-2xl font-black text-slate-900 leading-tight mb-1 tracking-tight">{current.pattern}</h3>
+                            <p className="text-slate-400 text-sm font-medium italic">{current.desc}</p>
+                        </div>
+
+                        <div className="flex-none bg-gradient-premium rounded-[2.5rem] p-10 text-white text-center shadow-2xl mb-6 min-h-[160px] flex items-center justify-center relative overflow-hidden">
+                            <h4 className="text-2xl font-bold leading-snug tracking-tight z-10 underline decoration-blue-500 underline-offset-8 font-eng">"{current.kr}"</h4>
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12"></div>
+                        </div>
+
+                        <div className="flex-1 relative mb-6">
+                            {showAnswer ? (
+                                <div className="h-full bg-blue-50 rounded-[2.5rem] p-8 border-2 border-blue-100 flex flex-col justify-center animate-in zoom-in duration-300 relative">
+                                    <button onClick={() => speak(current.en)} className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white text-blue-600 shadow-md flex items-center justify-center hover:scale-110 transition"><i className="fas fa-volume-up text-xl"></i></button>
+                                    <p className="text-[10px] font-black text-blue-600 mb-4 tracking-widest uppercase italic">Master Answer</p>
+                                    <p className="text-3xl font-black text-slate-800 tracking-tight leading-tight font-eng">{current.en}</p>
+                                </div>
+                            ) : (
+                                <div className="h-full relative">
+                                    <textarea
+                                        className="w-full h-full p-8 rounded-[2.5rem] bg-slate-50 border-0 outline-none resize-none text-xl font-bold text-slate-800 placeholder:text-slate-200 tracking-tight"
+                                        placeholder="Speak or type here..."
+                                        value={userInput}
+                                        onChange={(e) => setUserInput(e.target.value)}
+                                    />
+                                    <button onClick={startListening} className={`absolute bottom-6 right-6 w-16 h-16 rounded-full flex items-center justify-center shadow-xl transition-all ${isListening ? 'bg-red-500 text-white mic-active' : 'bg-blue-600 text-white'}`}>
+                                        <i className={`fas ${isListening ? 'fa-stop' : 'fa-microphone'} text-xl`}></i>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex-none pb-4">
+                            {!showAnswer ? (
+                                <button onClick={() => { setShowAnswer(true); speak(current.en); }} disabled={!userInput} className="w-full bg-slate-900 text-white font-black py-6 rounded-[2rem] shadow-xl disabled:bg-slate-100 disabled:text-slate-300 uppercase tracking-widest text-xs transition-all active:scale-95">Check Answer</button>
+                            ) : (
+                                <button onClick={() => { setShowAnswer(false); setUserInput(""); if(currentIndex < currentQuizzes.length - 1) setCurrentIndex(currentIndex + 1); else setView('HOME'); }} className="w-full bg-blue-600 text-white font-black py-6 rounded-[2rem] shadow-xl hover:bg-blue-700 uppercase tracking-widest text-xs transition-all active:scale-95">Continue Next</button>
+                            )}
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
