@@ -11,12 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Pretendard:wght@400;600;700;800&display=swap');
-        body { font-family: 'Pretendard', sans-serif; background: #F8FAFC; overflow: hidden; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', sans-serif; background: #F8FAFC; overflow: hidden; margin: 0; }
         .font-eng { font-family: 'Montserrat', sans-serif; }
         .bg-premium { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
         .mic-active { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { transform: scale(1); } }
-        .page-transition { animation: fadeIn 0.4s ease-out; }
+        .page-transition { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         * { -webkit-tap-highlight-color: transparent; outline: none; }
     </style>
@@ -56,7 +56,7 @@
             { id: 26, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "I'll let you know ~", desc: "알려줄게", quizzes: [{ kr: "나중에 알려줄게.", en: "I'll let you know later." }, { kr: "결과를 알려줄게.", en: "I'll let you know the result." }, { kr: "도착하자마자 알려줄게.", en: "I'll let you know as soon as I arrive." }] },
             { id: 27, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "I didn't mean to ~", desc: "~하려던 건 아니었어", quizzes: [{ kr: "널 다치게 하려던 건 아니었어.", en: "I didn't mean to hurt you." }, { kr: "방해하려던 건 아니었어.", en: "I didn't mean to interrupt." }, { kr: "널 계속 기다리게 하려던 건 아니었어.", en: "I didn't mean to keep you waiting." }] },
             { id: 28, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "I can't wait to ~", desc: "~하는 게 너무 기대돼", quizzes: [{ kr: "널 만나는 게 너무 기대돼.", en: "I can't wait to see you." }, { kr: "새 직장을 시작하는 게 너무 기대돼.", en: "I can't wait to start my new job." }, { kr: "휴가 가는 게 너무 기대돼.", en: "I can't wait to go on vacation." }] },
-            { id: 29, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "That's why ~", desc: "그래서 ~한 거야", quizzes: [{ kr: "그래서 내가 일찍 나간 거야.", en: "That's why I left early." }, { kr: "그래서 내가 여기 있는 거야.", en: "That's why I'm here." }, { kr: "그래서 내가 이곳을 사랑하는 거야.", en: "That's why I love this place." }] },
+            { id: 29, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "That's why ~", desc: "그래서 ~한 거야", quizzes: [{ kr: "그래서 내가 일찍 나간 거야.", en: "That's why I left early." }, { kr: "그래서 내가 여기 있는 거야.", en: "That's why Im here." }, { kr: "그래서 내가 이곳을 사랑하는 거야.", en: "That's why I love this place." }] },
             { id: 30, part: "PART 4", category: "상황 설명 및 논리 연결", pattern: "That's what I mean", desc: "내 말이 바로 그 말이야", quizzes: [{ kr: "그러니까 그게 내가 하고 싶은 말이야.", en: "That's what I mean." }, { kr: "정확해, 내 말이 그 말이야!", en: "Exactly, that's what I mean!" }, { kr: "내 말이 무슨 뜻인지 알지.", en: "You know what I mean." }] }
         ];
 
@@ -88,27 +88,30 @@
                 window.speechSynthesis.speak(uttr);
             };
 
-            const startMode = (modeType, partId = null) => {
-                let data = [];
-                if (modeType === 'ALL') {
-                    speak("Starting Full Course");
-                    data = patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
-                } else if (modeType === 'RANDOM') {
-                    speak("Starting Random Test");
-                    data = shuffleArray(patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q }))));
-                } else if (modeType === 'PART') {
-                    speak(partId);
-                    data = patterns
-                        .filter(p => p.part === partId)
-                        .flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
-                }
-
-                if (data.length > 0) {
-                    setCurrentQuizzes(data);
+            const handleStart = (type, part = null) => {
+                if (type === 'ALL') {
+                    // speak 제거됨
+                    const all = patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
+                    setCurrentQuizzes(all);
                     setCurrentIndex(0);
-                    setView(modeType === 'RANDOM' ? 'TEST' : 'STUDY');
-                } else {
-                    alert("데이터를 불러오지 못했습니다.");
+                    setView('STUDY');
+                } else if (type === 'RANDOM') {
+                    // speak 제거됨
+                    const all = patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
+                    setCurrentQuizzes(shuffleArray(all));
+                    setCurrentIndex(0);
+                    setView('TEST');
+                } else if (type === 'PART_SELECT') {
+                    // speak 제거됨
+                    setView('PART_SELECT');
+                } else if (type === 'PART_GO') {
+                    // speak 제거됨
+                    const filtered = patterns
+                        .filter(p => p.part === part)
+                        .flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
+                    setCurrentQuizzes(filtered);
+                    setCurrentIndex(0);
+                    setView('STUDY');
                 }
             };
 
@@ -118,7 +121,7 @@
                 if (currentIndex < currentQuizzes.length - 1) {
                     setCurrentIndex(currentIndex + 1);
                 } else {
-                    speak("Great job! Session complete.");
+                    // speak 제거됨
                     setView('HOME');
                 }
             };
@@ -126,37 +129,37 @@
             if (view === 'HOME') {
                 return (
                     <div className="h-screen flex flex-col p-6 page-transition">
-                        <header className="flex-none pt-12 pb-12 text-center">
+                        <header className="flex-none pt-12 pb-14 text-center">
                             <h1 className="text-3xl font-black text-slate-900 leading-tight mb-2 tracking-tighter italic">필수 영어 패턴 <span className="text-blue-600">30</span></h1>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] font-eng">Professional Training App</p>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] font-eng">Professional English Training</p>
                         </header>
 
                         <div className="flex-1 flex flex-col gap-5">
-                            <button onClick={() => startMode('ALL')} className="group flex-none bg-premium p-8 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 text-left relative overflow-hidden">
+                            <button onClick={() => handleStart('ALL')} className="group flex-none bg-premium p-8 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 text-left relative overflow-hidden">
                                 <div className="relative z-10">
                                     <h2 className="text-2xl font-bold text-white tracking-tight">전체 학습하기</h2>
-                                    <p className="text-blue-400 font-eng text-xl mt-1 tracking-tight font-bold italic">Full Course Study</p>
+                                    <p className="text-blue-400 font-eng text-lg mt-1 tracking-tight font-bold italic">Full Course</p>
                                 </div>
-                                <i className="fas fa-play absolute right-8 top-1/2 -translate-y-1/2 text-white/5 text-5xl group-hover:text-blue-500/20"></i>
+                                <i className="fas fa-list-ul absolute right-8 top-1/2 -translate-y-1/2 text-white/5 text-5xl group-hover:text-blue-500/20 transition-all"></i>
                             </button>
 
-                            <button onClick={() => { speak("Choose a part"); setView('PART_SELECT'); }} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative">
+                            <button onClick={() => handleStart('PART_SELECT')} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative">
                                 <div className="relative z-10">
                                     <h2 className="text-2xl font-bold text-slate-800 tracking-tight">파트별 집중 학습</h2>
-                                    <p className="text-slate-300 font-eng text-xl mt-1 tracking-tight font-bold italic uppercase">Part Focused Study</p>
+                                    <p className="text-slate-300 font-eng text-lg mt-1 tracking-tight font-bold italic uppercase">Part Focused Study</p>
                                 </div>
-                                <i className="fas fa-layer-group absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-blue-100 text-5xl"></i>
+                                <i className="fas fa-layer-group absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-blue-100 transition-all text-5xl"></i>
                             </button>
 
-                            <button onClick={() => startMode('RANDOM')} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative">
+                            <button onClick={() => handleStart('RANDOM')} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative border-b-4 border-b-orange-50">
                                 <div className="relative z-10">
                                     <h2 className="text-2xl font-bold text-slate-800 tracking-tight">무작위 랜덤 테스트</h2>
-                                    <p className="text-slate-300 font-eng text-xl mt-1 tracking-tight font-bold italic uppercase">Random Test Challenge</p>
+                                    <p className="text-slate-300 font-eng text-lg mt-1 tracking-tight font-bold italic uppercase">Random Test</p>
                                 </div>
-                                <i className="fas fa-shuffle absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-orange-100 text-5xl"></i>
+                                <i className="fas fa-shuffle absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-orange-100 transition-all text-5xl"></i>
                             </button>
                         </div>
-                        <footer className="flex-none py-6 text-center text-[10px] text-slate-300 font-bold tracking-widest uppercase italic">Practice Makes Perfect</footer>
+                        <footer className="flex-none py-6 text-center text-[10px] text-slate-300 font-bold tracking-widest uppercase">Repetition is the Mother of Learning</footer>
                     </div>
                 );
             }
@@ -171,18 +174,20 @@
                 return (
                     <div className="h-screen flex flex-col p-6 page-transition">
                         <header className="flex-none py-8 flex items-center gap-4">
-                            <button onClick={() => setView('HOME')} className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-slate-400 active:scale-90"><i className="fas fa-chevron-left"></i></button>
-                            <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Select Part</h2>
+                            <button onClick={() => setView('HOME')} className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-slate-400 active:scale-90 transition-transform"><i className="fas fa-chevron-left"></i></button>
+                            <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase italic">Select Section</h2>
                         </header>
-                        <div className="flex-1 flex flex-col gap-3 overflow-y-auto pr-1 pb-10">
+                        <div className="flex-1 flex flex-col gap-3 overflow-y-auto pr-1">
                             {parts.map(p => (
-                                <button key={p.id} onClick={() => startMode('PART', p.id)} className="flex-none bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-left flex justify-between items-center active:bg-blue-50">
+                                <button key={p.id} onClick={() => handleStart('PART_GO', p.id)} className="flex-none bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-left flex justify-between items-center active:bg-blue-50 transition-all">
                                     <div>
-                                        <p className="text-[10px] font-black text-blue-500 mb-1 tracking-widest uppercase tracking-[0.2em]">{p.id}</p>
+                                        <p className="text-[10px] font-black text-blue-500 mb-1 tracking-widest">{p.id}</p>
                                         <p className="font-bold text-slate-800 leading-tight text-lg">{p.title}</p>
-                                        <p className="text-[10px] text-slate-400 font-eng font-bold mt-1 tracking-wide italic">{p.sub}</p>
+                                        <p className="text-[10px] text-slate-400 font-eng font-bold mt-1 tracking-wide">{p.sub}</p>
                                     </div>
-                                    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-200"><i className="fas fa-play text-[10px]"></i></div>
+                                    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-200 group-active:text-blue-500 transition-colors">
+                                        <i className="fas fa-play text-[10px]"></i>
+                                    </div>
                                 </button>
                             ))}
                         </div>
@@ -197,7 +202,7 @@
                     <header className="flex-none flex items-center justify-between py-4 border-b border-slate-50 mb-4">
                         <button onClick={() => setView('HOME')} className="text-slate-300 hover:text-slate-800 transition"><i className="fas fa-times text-xl"></i></button>
                         <div className="text-center">
-                            <p className="text-[10px] font-black text-blue-500 tracking-widest mb-0.5 uppercase tracking-[0.2em]">{view}</p>
+                            <p className="text-[10px] font-black text-blue-500 tracking-widest mb-0.5 uppercase tracking-[0.2em] italic">{view}</p>
                             <p className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">{currentIndex + 1} / {currentQuizzes.length}</p>
                         </div>
                         <div className="w-6"></div>
@@ -205,7 +210,7 @@
 
                     <main className="flex-1 flex flex-col justify-between overflow-hidden">
                         <div className="flex-none mb-6">
-                            <span className="text-[10px] font-black text-blue-500 block mb-1 uppercase tracking-widest italic tracking-widest underline decoration-blue-100 underline-offset-4">{current.part}</span>
+                            <span className="text-[10px] font-black text-blue-500 block mb-1 uppercase tracking-widest">{current.part}</span>
                             <h3 className="text-2xl font-black text-slate-900 leading-tight mb-1 tracking-tight">{current.pattern}</h3>
                             <p className="text-slate-400 text-sm font-medium italic">{current.desc}</p>
                         </div>
@@ -218,31 +223,19 @@
                         <div className="flex-1 relative mb-6">
                             {showAnswer ? (
                                 <div className="h-full bg-blue-50 rounded-[2.5rem] p-8 border-2 border-blue-100 flex flex-col justify-center animate-in zoom-in duration-300 relative">
-                                    <button onClick={() => speak(current.en)} className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white text-blue-600 shadow-md flex items-center justify-center hover:scale-110 active:scale-95"><i className="fas fa-volume-up text-xl"></i></button>
+                                    <button onClick={() => speak(current.en)} className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white text-blue-600 shadow-md flex items-center justify-center hover:scale-110 transition active:scale-95"><i className="fas fa-volume-up text-xl"></i></button>
                                     <p className="text-[10px] font-black text-blue-600 mb-4 tracking-widest uppercase italic font-eng tracking-widest">Master Answer</p>
                                     <p className="text-3xl font-black text-slate-800 tracking-tight leading-tight font-eng italic">{current.en}</p>
                                 </div>
                             ) : (
-                                <div className="h-full relative shadow-inner rounded-[2.5rem] overflow-hidden">
+                                <div className="h-full relative">
                                     <textarea
                                         className="w-full h-full p-8 rounded-[2.5rem] bg-slate-50 border-0 outline-none resize-none text-xl font-bold text-slate-800 placeholder:text-slate-200 tracking-tight"
-                                        placeholder="영어로 말해보세요..."
+                                        placeholder="Speak or type your answer..."
                                         value={userInput}
                                         onChange={(e) => setUserInput(e.target.value)}
                                     />
-                                    <button 
-                                        onClick={() => {
-                                            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                                            if (!SpeechRecognition) return alert("음성 인식이 지원되지 않습니다.");
-                                            const recognition = new SpeechRecognition();
-                                            recognition.lang = 'en-US';
-                                            recognition.onstart = () => setIsListening(true);
-                                            recognition.onend = () => setIsListening(false);
-                                            recognition.onresult = (e) => setUserInput(e.results[0][0].transcript);
-                                            recognition.start();
-                                        }} 
-                                        className={`absolute bottom-6 right-6 w-16 h-16 rounded-full flex items-center justify-center shadow-xl transition-all ${isListening ? 'bg-red-500 text-white mic-active' : 'bg-blue-600 text-white'}`}
-                                    >
+                                    <button onClick={startListening} className={`absolute bottom-6 right-6 w-16 h-16 rounded-full flex items-center justify-center shadow-xl transition-all ${isListening ? 'bg-red-500 text-white mic-active' : 'bg-blue-600 text-white active:scale-95'}`}>
                                         <i className={`fas ${isListening ? 'fa-stop' : 'fa-microphone'} text-xl`}></i>
                                     </button>
                                 </div>
