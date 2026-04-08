@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pattern Master 30</title>
+    <title>필수 영어 패턴 30</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Pretendard:wght@400;600;700&display=swap');
-        body { font-family: 'Pretendard', sans-serif; background: #F8FAFC; overflow: hidden; margin: 0; }
-        .font-heading { font-family: 'Inter', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Pretendard:wght@400;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background: #F1F5F9; overflow: hidden; margin: 0; }
+        .font-eng { font-family: 'Montserrat', sans-serif; }
+        .bg-gradient-premium { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .mic-active { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { transform: scale(1); } }
-        .page-transition { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .page-transition { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         * { -webkit-tap-highlight-color: transparent; outline: none; }
     </style>
 </head>
@@ -25,7 +26,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect } = React;
 
         const patterns = [
             { id: 1, part: "PART 1", category: "현재의 행동 및 의도", pattern: "I'm trying to ~", desc: "~하려고 노력 중이야", quizzes: [{ kr: "자려고 노력 중이야.", en: "I'm trying to sleep." }, { kr: "내 일에 집중하려고 노력 중이야.", en: "I'm trying to focus on my work." }, { kr: "내 영어를 고치려고 노력 중이야.", en: "I'm trying to fix my English." }] },
@@ -77,202 +78,162 @@
             const [showAnswer, setShowAnswer] = useState(false);
             const [isListening, setIsListening] = useState(false);
 
-            // 여성 목소리 찾기 및 발화 함수
             const speak = (text, lang = 'en-US') => {
                 window.speechSynthesis.cancel();
                 const uttr = new SpeechSynthesisUtterance(text);
                 const voices = window.speechSynthesis.getVoices();
-                
-                // 여성 목소리 키워드 필터링 (Google US English, Samantha, Microsoft Zira 등)
-                const femaleVoice = voices.find(v => 
-                    v.lang.startsWith(lang) && 
-                    (v.name.includes('Female') || v.name.includes('Google US English') || v.name.includes('Samantha') || v.name.includes('Zira') || v.name.includes('Moira'))
-                );
-                
+                const femaleVoice = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Samantha') || v.name.includes('Zira') || v.name.includes('Google US English') || v.name.includes('Female')));
                 if (femaleVoice) uttr.voice = femaleVoice;
                 uttr.lang = lang;
                 uttr.rate = 0.95;
                 window.speechSynthesis.speak(uttr);
             };
 
-            const startListening = () => {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (!SpeechRecognition) return alert("Speech recognition not supported");
-                const recognition = new SpeechRecognition();
-                recognition.lang = 'en-US';
-                recognition.onstart = () => setIsListening(true);
-                recognition.onend = () => setIsListening(false);
-                recognition.onresult = (e) => setUserInput(e.results[0][0].transcript);
-                recognition.start();
-            };
-
-            const handleMenuClick = (type, label) => {
-                speak(label, 'en-US');
+            const handleStart = (type, part = null) => {
                 if (type === 'ALL') {
+                    speak("Starting Full Course");
                     const all = patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
                     setCurrentQuizzes(all);
                     setCurrentIndex(0);
                     setView('STUDY');
-                } else if (type === 'PART_MENU') {
-                    setView('PART_SELECT');
                 } else if (type === 'RANDOM') {
+                    speak("Starting Random Test");
                     const all = patterns.flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
                     setCurrentQuizzes(shuffleArray(all));
                     setCurrentIndex(0);
                     setView('TEST');
+                } else if (type === 'PART_SELECT') {
+                    speak("Select a part");
+                    setView('PART_SELECT');
+                } else if (type === 'PART_GO') {
+                    speak("Starting " + part);
+                    const filtered = patterns
+                        .filter(p => p.part === part)
+                        .flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
+                    setCurrentQuizzes(filtered);
+                    setCurrentIndex(0);
+                    setView('STUDY');
                 }
             };
 
-            const startPartStudy = (partName, label) => {
-                speak(label, 'en-US');
-                const filtered = patterns
-                    .filter(p => p.part === partName)
-                    .flatMap(p => p.quizzes.map(q => ({ ...p, ...q })));
-                setCurrentQuizzes(filtered);
-                setCurrentIndex(0);
-                setView('STUDY');
-            };
-
-            const handleNext = () => {
-                setShowAnswer(false);
-                setUserInput("");
-                if (currentIndex < currentQuizzes.length - 1) {
-                    setCurrentIndex(currentIndex + 1);
-                } else {
-                    speak("Course complete", 'en-US');
-                    setView('HOME');
-                }
-            };
-
-            // 홈 화면 컴포넌트
-            const HomeView = () => (
-                <div className="h-screen flex flex-col px-8 py-12 page-transition">
-                    <header className="mb-16 text-center">
-                        <h1 className="font-heading text-5xl font-black text-slate-900 tracking-tighter mb-2">CORE<span className="text-blue-600">30</span></h1>
-                        <p className="text-slate-400 font-bold text-[10px] tracking-[0.2em] uppercase">English Pattern Coach</p>
-                    </header>
-                    
-                    <div className="flex-1 flex flex-col gap-4">
-                        <button onClick={() => handleMenuClick('ALL', 'Full Course')} className="group relative bg-slate-900 text-white p-8 rounded-[2rem] overflow-hidden transition-all active:scale-95 shadow-2xl shadow-slate-200">
-                            <div className="relative z-10 flex flex-col items-start text-left">
-                                <span className="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-widest">In Order</span>
-                                <span className="text-2xl font-black italic">Full Course</span>
-                            </div>
-                            <i className="fas fa-arrow-right absolute right-8 bottom-8 text-slate-700 group-hover:text-blue-500 transition-colors"></i>
-                        </button>
-
-                        <button onClick={() => handleMenuClick('PART_MENU', 'Part Focused')} className="group relative bg-white border border-slate-100 p-8 rounded-[2rem] overflow-hidden transition-all active:scale-95 shadow-xl shadow-slate-100">
-                            <div className="relative z-10 flex flex-col items-start text-left">
-                                <span className="text-[10px] font-bold text-blue-500 mb-1 uppercase tracking-widest">Selection</span>
-                                <span className="text-2xl font-black text-slate-800">Part Focused</span>
-                            </div>
-                            <i className="fas fa-layer-group absolute right-8 bottom-8 text-slate-100 group-hover:text-blue-500 transition-colors"></i>
-                        </button>
-
-                        <button onClick={() => handleMenuClick('RANDOM', 'Random Test')} className="group relative bg-white border border-slate-100 p-8 rounded-[2rem] overflow-hidden transition-all active:scale-95 shadow-xl shadow-slate-100">
-                            <div className="relative z-10 flex flex-col items-start text-left">
-                                <span className="text-[10px] font-bold text-orange-500 mb-1 uppercase tracking-widest">Challenge</span>
-                                <span className="text-2xl font-black text-slate-800 italic">Random Test</span>
-                            </div>
-                            <i className="fas fa-shuffle absolute right-8 bottom-8 text-slate-100 group-hover:text-orange-500 transition-colors"></i>
-                        </button>
-                    </div>
-                </div>
-            );
-
-            // 파트 선택 화면 컴포넌트
-            const PartSelectView = () => (
-                <div className="h-screen flex flex-col px-8 py-12 page-transition">
-                    <header className="mb-10 flex items-center gap-4">
-                        <button onClick={() => setView('HOME')} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600"><i className="fas fa-chevron-left"></i></button>
-                        <h2 className="text-2xl font-black text-slate-800">Choose Part</h2>
-                    </header>
-                    <div className="grid grid-cols-1 gap-3">
-                        {[
-                            { id: 'PART 1', title: 'Actions & Intentions', label: 'Part One' },
-                            { id: 'PART 2', title: 'Requests & Politeness', label: 'Part Two' },
-                            { id: 'PART 3', title: 'Opinions & Judgments', label: 'Part Three' },
-                            { id: 'PART 4', title: 'Situations & Logic', label: 'Part Four' }
-                        ].map(p => (
-                            <button key={p.id} onClick={() => startPartStudy(p.id, p.label)} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm text-left flex justify-between items-center active:bg-slate-50 transition-colors">
-                                <div>
-                                    <p className="text-[10px] font-bold text-blue-600 mb-0.5">{p.id}</p>
-                                    <p className="font-bold text-slate-800">{p.title}</p>
-                                </div>
-                                <i className="fas fa-play text-[10px] text-slate-300"></i>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            );
-
-            // 학습/테스트 화면 컴포넌트
-            const StudyView = () => {
-                const current = currentQuizzes[currentIndex];
+            if (view === 'HOME') {
                 return (
-                    <div className="h-screen flex flex-col px-6 py-6 page-transition">
-                        <header className="flex justify-between items-center mb-6">
-                            <button onClick={() => setView('HOME')} className="text-slate-300 hover:text-slate-800 transition"><i className="fas fa-times text-xl"></i></button>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{currentIndex + 1} / {currentQuizzes.length}</span>
+                    <div className="h-screen flex flex-col p-6 page-transition">
+                        <header className="flex-none pt-12 pb-16 text-center">
+                            <h1 className="text-3xl font-black text-slate-900 leading-tight mb-2 tracking-tighter">필수 영어 패턴 <span className="text-blue-600">30</span></h1>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] font-eng">Essential English Patterns</p>
                         </header>
 
-                        <div className="flex-1 flex flex-col justify-between max-h-[70vh]">
-                            <div className="mb-6">
-                                <span className="text-[10px] font-bold text-blue-500 block mb-2 tracking-widest uppercase">{current.part}</span>
-                                <h3 className="text-2xl font-black text-slate-900 leading-tight mb-2 tracking-tight">{current.pattern}</h3>
-                                <p className="text-slate-400 text-sm font-medium italic">{current.desc}</p>
-                            </div>
+                        <div className="flex-1 flex flex-col gap-4">
+                            <button onClick={() => handleStart('ALL')} className="group flex-none bg-gradient-premium p-8 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 text-left relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1 font-eng italic">In Order</p>
+                                    <h2 className="text-2xl font-bold text-white tracking-tight">전체 학습하기 <span className="text-blue-400 font-eng text-xl ml-1">Full Course</span></h2>
+                                </div>
+                                <i className="fas fa-play absolute right-8 top-1/2 -translate-y-1/2 text-white/10 text-4xl group-hover:text-blue-500/30 transition-colors"></i>
+                            </button>
 
-                            <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white text-center shadow-2xl mb-6 flex items-center justify-center min-h-[160px]">
-                                <p className="text-2xl font-bold leading-snug tracking-tight">"{current.kr}"</p>
-                            </div>
+                            <button onClick={() => handleStart('PART_SELECT')} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative">
+                                <p className="text-blue-500 text-[10px] font-black uppercase tracking-widest mb-1 font-eng italic">Sectional</p>
+                                <h2 className="text-2xl font-bold text-slate-800 tracking-tight">파트별 집중 학습 <span className="text-slate-300 font-eng text-xl ml-1">Part Study</span></h2>
+                                <i className="fas fa-layer-group absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-blue-100 transition-colors text-4xl"></i>
+                            </button>
 
-                            <div className="relative flex-1 min-h-[140px]">
-                                {showAnswer ? (
-                                    <div className="h-full bg-blue-50 rounded-[2.5rem] p-8 border-2 border-blue-100 animate-in zoom-in duration-300">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <span className="text-blue-600 font-bold text-[10px] tracking-widest uppercase italic">Master Answer</span>
-                                            <button onClick={() => speak(current.en)} className="w-10 h-10 rounded-full bg-white text-blue-600 shadow-sm flex items-center justify-center"><i className="fas fa-volume-up"></i></button>
-                                        </div>
-                                        <p className="text-2xl font-black text-slate-800 tracking-tight leading-tight">{current.en}</p>
-                                    </div>
-                                ) : (
-                                    <div className="h-full relative">
-                                        <textarea
-                                            className="w-full h-full p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-inner outline-none resize-none text-xl font-bold text-slate-800 placeholder:text-slate-200 tracking-tight"
-                                            placeholder="Speak or type here..."
-                                            value={userInput}
-                                            onChange={(e) => setUserInput(e.target.value)}
-                                        />
-                                        <button onClick={startListening} className={`absolute bottom-4 right-4 w-16 h-16 rounded-full flex items-center justify-center shadow-xl transition-all ${isListening ? 'bg-red-500 text-white mic-active' : 'bg-blue-600 text-white'}`}>
-                                            <i className={`fas ${isListening ? 'fa-stop' : 'fa-microphone'} text-xl`}></i>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                            <button onClick={() => handleStart('RANDOM')} className="group flex-none bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 transition-all active:scale-95 text-left relative">
+                                <p className="text-orange-500 text-[10px] font-black uppercase tracking-widest mb-1 font-eng italic">Random</p>
+                                <h2 className="text-2xl font-bold text-slate-800 tracking-tight">무작위 랜덤 테스트 <span className="text-slate-300 font-eng text-xl ml-1">Random Test</span></h2>
+                                <i className="fas fa-shuffle absolute right-8 top-1/2 -translate-y-1/2 text-slate-50 group-hover:text-orange-100 transition-colors text-4xl"></i>
+                            </button>
                         </div>
+                        <footer className="flex-none py-6 text-center text-[10px] text-slate-300 font-bold tracking-widest uppercase">Mastery through Repetition</footer>
+                    </div>
+                );
+            }
 
-                        <div className="mt-auto pb-4 pt-6">
-                            {!showAnswer ? (
-                                <button onClick={() => { setShowAnswer(true); speak(current.en); }} disabled={!userInput} className="w-full bg-slate-900 text-white font-black py-6 rounded-[2rem] shadow-xl disabled:bg-slate-100 disabled:text-slate-300 transition-all active:scale-95 uppercase tracking-widest text-xs">Confirm Answer</button>
-                            ) : (
-                                <button onClick={handleNext} className="w-full bg-blue-600 text-white font-black py-6 rounded-[2rem] shadow-xl hover:bg-blue-700 transition-all active:scale-95 uppercase tracking-widest text-xs">Continue Next</button>
-                            )}
+            if (view === 'PART_SELECT') {
+                const parts = [
+                    { id: 'PART 1', title: '현재의 행동 및 의도', sub: 'Actions & Intentions' },
+                    { id: 'PART 2', title: '요청 및 정중한 표현', sub: 'Requests & Politeness' },
+                    { id: 'PART 3', title: '의견, 판단 및 감각', sub: 'Opinions & Judgments' },
+                    { id: 'PART 4', title: '상황 설명 및 논리 연결', sub: 'Situations & Logic' }
+                ];
+                return (
+                    <div className="h-screen flex flex-col p-6 page-transition">
+                        <header className="flex-none py-8 flex items-center gap-4">
+                            <button onClick={() => setView('HOME')} className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-slate-400 active:scale-90 transition-transform"><i className="fas fa-chevron-left"></i></button>
+                            <h2 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Select Part</h2>
+                        </header>
+                        <div className="flex-1 flex flex-col gap-3 overflow-y-auto">
+                            {parts.map(p => (
+                                <button key={p.id} onClick={() => handleStart('PART_GO', p.id)} className="flex-none bg-white p-6 rounded-3xl border border-slate-100 shadow-sm text-left flex justify-between items-center active:bg-blue-50 transition-all">
+                                    <div>
+                                        <p className="text-[10px] font-black text-blue-500 mb-1 tracking-widest">{p.id}</p>
+                                        <p className="font-bold text-slate-800 leading-tight">{p.title}</p>
+                                        <p className="text-[10px] text-slate-400 font-eng font-bold">{p.sub}</p>
+                                    </div>
+                                    <i className="fas fa-chevron-right text-slate-100"></i>
+                                </button>
+                            ))}
                         </div>
                     </div>
                 );
-            };
+            }
 
-            // 목소리 목록 로드 대기
-            useEffect(() => {
-                window.speechSynthesis.getVoices();
-            }, []);
+            const current = currentQuizzes[currentIndex];
 
             return (
-                <div className="max-w-md mx-auto">
-                    {view === 'HOME' && <HomeView />}
-                    {view === 'PART_SELECT' && <PartSelectView />}
-                    {(view === 'STUDY' || view === 'TEST') && <StudyView />}
+                <div className="h-screen flex flex-col p-6 page-transition bg-white">
+                    <header className="flex-none flex items-center justify-between py-4 border-b border-slate-50 mb-4">
+                        <button onClick={() => setView('HOME')} className="text-slate-300 hover:text-slate-800 transition"><i className="fas fa-times text-xl"></i></button>
+                        <div className="text-center">
+                            <p className="text-[10px] font-black text-blue-500 tracking-widest mb-0.5 uppercase tracking-[0.2em]">{view}</p>
+                            <p className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">{currentIndex + 1} / {currentQuizzes.length}</p>
+                        </div>
+                        <div className="w-6"></div>
+                    </header>
+
+                    <main className="flex-1 flex flex-col justify-between overflow-hidden">
+                        <div className="flex-none mb-6">
+                            <span className="text-[10px] font-black text-blue-500 block mb-1 uppercase tracking-widest">{current.part}</span>
+                            <h3 className="text-2xl font-black text-slate-900 leading-tight mb-1 tracking-tight">{current.pattern}</h3>
+                            <p className="text-slate-400 text-sm font-medium italic">{current.desc}</p>
+                        </div>
+
+                        <div className="flex-none bg-gradient-premium rounded-[2.5rem] p-10 text-white text-center shadow-2xl mb-6 min-h-[160px] flex items-center justify-center relative overflow-hidden">
+                            <h4 className="text-2xl font-bold leading-snug tracking-tight z-10 underline decoration-blue-500 underline-offset-8 font-eng">"{current.kr}"</h4>
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12"></div>
+                        </div>
+
+                        <div className="flex-1 relative mb-6">
+                            {showAnswer ? (
+                                <div className="h-full bg-blue-50 rounded-[2.5rem] p-8 border-2 border-blue-100 flex flex-col justify-center animate-in zoom-in duration-300 relative">
+                                    <button onClick={() => speak(current.en)} className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white text-blue-600 shadow-md flex items-center justify-center hover:scale-110 transition"><i className="fas fa-volume-up text-xl"></i></button>
+                                    <p className="text-[10px] font-black text-blue-600 mb-4 tracking-widest uppercase italic">Master Answer</p>
+                                    <p className="text-3xl font-black text-slate-800 tracking-tight leading-tight font-eng">{current.en}</p>
+                                </div>
+                            ) : (
+                                <div className="h-full relative">
+                                    <textarea
+                                        className="w-full h-full p-8 rounded-[2.5rem] bg-slate-50 border-0 outline-none resize-none text-xl font-bold text-slate-800 placeholder:text-slate-200 tracking-tight"
+                                        placeholder="Speak or type here..."
+                                        value={userInput}
+                                        onChange={(e) => setUserInput(e.target.value)}
+                                    />
+                                    <button onClick={startListening} className={`absolute bottom-6 right-6 w-16 h-16 rounded-full flex items-center justify-center shadow-xl transition-all ${isListening ? 'bg-red-500 text-white mic-active' : 'bg-blue-600 text-white'}`}>
+                                        <i className={`fas ${isListening ? 'fa-stop' : 'fa-microphone'} text-xl`}></i>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex-none pb-4">
+                            {!showAnswer ? (
+                                <button onClick={() => { setShowAnswer(true); speak(current.en); }} disabled={!userInput} className="w-full bg-slate-900 text-white font-black py-6 rounded-[2rem] shadow-xl disabled:bg-slate-100 disabled:text-slate-300 uppercase tracking-widest text-xs transition-all active:scale-95">Check Answer</button>
+                            ) : (
+                                <button onClick={() => { setShowAnswer(false); setUserInput(""); if(currentIndex < currentQuizzes.length - 1) setCurrentIndex(currentIndex + 1); else setView('HOME'); }} className="w-full bg-blue-600 text-white font-black py-6 rounded-[2rem] shadow-xl hover:bg-blue-700 uppercase tracking-widest text-xs transition-all active:scale-95">Continue Next</button>
+                            )}
+                        </div>
+                    </main>
                 </div>
             );
         }
